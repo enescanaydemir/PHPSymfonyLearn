@@ -7,6 +7,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
+use FFI\Exception;
 
 /**
  * @extends ServiceEntityRepository<Category>
@@ -75,4 +76,119 @@ class CategoryRepository extends ServiceEntityRepository
         ;
     }
     */
+
+
+    /**
+     * @return int|mixed[]|string
+     */
+    public function getCategory()
+    {
+        $getCategory = $this->createQueryBuilder($alias = "C")
+            ->select($select = 'C.name')
+            ->getQuery()
+            ->getArrayResult();
+
+        return $getCategory;
+    }
+
+    public function newCategory()
+    {
+        $result = ["success"=>false, "message"=>"İşlem yapılamadı"];
+        try {
+            $em = $this->getEntityManager();
+            $newCategory = new Category();
+    
+            $newCategory
+                ->setName($name = "Oyun");
+            $em->persist($newCategory);
+            $em->flush();
+
+            $result["success"] = true;
+            $result["message"] = "Başarılı bir şekilde kaydedildi";
+        }catch (\Exception $exception){
+            $result["success"] = false;
+            $result["message"] = $exception->getMessage();
+        }
+
+        return $result;
+    }
+    
+    /**
+     *
+     * @param int $id
+     * @return array
+     */
+    public function getShowSingleCategory(int $id)
+    {
+        $result = ["success"=>false, "message"=>"İşlem yapılamadı", "data"=>[]];
+        try {
+            $em = $this->getEntityManager();
+            $getShowSingleData = $em->find($className = Category::class, $id);
+
+            $result["success"] = true;
+            $result["message"] = "Başarılı";
+            $result["data"] = $getShowSingleData;
+        } catch (\Exception $exception){
+            $result["success"] = false;
+            $result["message"] = $exception->getMessage();
+            $result["data"] = null;
+        }
+
+        return $result;
+    }
+
+    /**
+     *
+     * @param integer $id
+     * @param array $postData
+     * @return array
+     */
+    public function updateCategory(int $id, array $postData)
+    {
+        $result = ["success"=>false, "message"=>"İşlem yapılamadı"];
+        try {
+            $em = $this->getEntityManager();
+            $updateCategory = $em->find(Category::class, $id);
+            $updateCategory
+                ->setName($postData["setName"]);
+            $em->persist($updateCategory);
+            $em->flush();
+
+            $result["success"] = true;
+            $result["message"] = "Başarılı";
+        }catch (\Exception $exception){
+            $result["success"] = false;
+            $result["message"] = $exception->getMessage();
+        }
+
+        return $result;
+    }
+
+
+
+        /**
+         *
+         * @param integer $id
+         * @return void
+         */
+    public function deleteCategory(int $id)
+    {
+        $result = ["success"=>false, "message"=>"İşlem yapılamadı"];
+        try {
+            $em = $this->getEntityManager();
+            $find = $em->find(Category::class, $id);
+
+            $em->remove($find);
+            $em->flush();
+
+            $result["success"] = true;
+            $result["message"] = "Silme Başarılı";
+        }catch (\Exception $exception){
+            $result["success"] = false;
+            $result["message"] = $exception->getMessage();
+        }
+
+        return $result;
+    }
+
 }
