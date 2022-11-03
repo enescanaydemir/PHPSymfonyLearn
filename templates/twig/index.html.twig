@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello TwigController!{% endblock %}
+
+{% block body %}
+    {% for data,key in arrData %}
+        {{ key }} {{ data }}
+    {% endfor %}
+
+    {% if isActive == true %}
+        <h1>
+            true
+        </h1>
+
+    {% elseif isActive == false %}
+        <h1>
+            false
+        </h1>
+    {% endif %}
+
+    {% if isActive is defined %}
+        <h1>
+            Data Bulundu!
+        </h1>
+    {% endif %}
+
+    {% if isActive is not defined %}
+        <h1>
+            Data Bulunamadı!
+        </h1>
+    {% endif %}
+{% endblock %}

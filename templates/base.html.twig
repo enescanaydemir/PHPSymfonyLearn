@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
         {# Run `composer require symfony/webpack-encore-bundle`
-           and uncomment the following Encore helpers to start using Symfony UX #}
+            and uncomment the following Encore helpers to start using Symfony UX #}
         {% block stylesheets %}
             {#{{ encore_entry_link_tags('app') }}#}
         {% endblock %}
@@ -14,6 +14,16 @@
         {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+
+    {% if isActive is not defined %}
+        <div class="myDiv">
+        <h2>This is a heading in a div element</h2>
+        <p>This is some text in a div element.</p>
+        </div>
+    {% endif %}
+
+        {% block body %}
+
+        {% endblock %}
     </body>
 </html>
